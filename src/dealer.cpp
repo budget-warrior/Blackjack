@@ -2,34 +2,22 @@
 
 namespace dealer
 {
-    namespace // Anonymous namespace so that only the functions inside of the namespace can access should_draw_card
+    bool should_draw_card(bool busts, int total_card_value)
     {
-        bool should_draw_card(bool busts, int total_card_value)
-        {
-            if (busts)
-                return true;
-
-            if (total_card_value <= 17)
-                return true;
-            else
-                return false;
-        }
-
+        return busts || total_card_value <= 17;
     }
 
     int get_random_card()
     {
-        int card = 1 + (rand() % 10);
-
-        return card;
+        return 1 + (rand() % 10);
     }
 
     std::vector<int> generate_dealer_cards()
     {
         bool busts = false;
-        if (rand() % 101 < 10)
+        if (rand() % 101 < 5)
         {
-            busts = true; // there is a 10% chance that the dealer busts
+            busts = true; // there is a 5% chance that the dealer busts
         }
 
         std::vector<int> cards = {get_random_card(), get_random_card()};
