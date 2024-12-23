@@ -14,12 +14,7 @@ namespace dealer
 
     std::vector<int> generate_dealer_cards()
     {
-        bool busts = false;
-        if (rand() % 101 < 5)
-        {
-            busts = true; // there is a 5% chance that the dealer busts
-        }
-
+        bool busts = rand() % 101 < 10; // there is a 10% chance that the dealer busts
         std::vector<int> cards = {get_random_card(), get_random_card()};
 
         while (should_draw_card(busts, add_card_values(cards)))
@@ -33,7 +28,7 @@ namespace dealer
 
     int add_card_values(std::vector<int> cards)
     {
-        int total = 0;
+        int total = 0, aces = 0;
 
         std::sort(cards.begin(), cards.end(), std::greater<>());
 
@@ -41,44 +36,36 @@ namespace dealer
         {
             if (card == 1)
             {
-                int aces = 0;
-                for (const int c : cards)
-                {
-                    if (c == 1)
-                    {
-                        aces++;
-                    }
-                }
-
-                if (aces > 1)
-                {
-                    // equivalent to total + 11 + (aces - 1)
-                    // the main idea is that only one of the aces can be 11 at a time
-                    if (total + 10 + aces < 21)
-                    {
-                        total += 10 + aces;
-                    }
-                    else
-                    {
-                        total += aces;
-                    }
-                    break;
-                }
-                else
-                {
-                    if (total + 11 > 21)
-                    {
-                        total += 1;
-                    }
-                    else
-                    {
-                        total += 11;
-                    }
-                }
+                aces++;
             }
             else
             {
                 total += card;
+            }
+        }
+
+        if (aces > 1)
+        {
+            // equivalent to total + 11 + (aces - 1)
+            // the main idea is that only one of the aces can be 11 at a time
+            if (total + 10 + aces < 21)
+            {
+                total += 10 + aces;
+            }
+            else
+            {
+                total += aces;
+            }
+        }
+        else
+        {
+            if (total + 11 > 21)
+            {
+                total += 1;
+            }
+            else
+            {
+                total += 11;
             }
         }
 
